@@ -1,0 +1,58 @@
+
+{
+  "info": {
+    "name": "User Authentication & JWT",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Register User",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Aryan Jain\",\"email\":\"aryan@gmail.com\",\"password\":\"Aryan12345\"}"
+        },
+        "url": "http://127.0.0.1:5000/api/auth/register"
+      }
+    },
+    {
+      "name": "Login User",
+      "event": [{
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "if (pm.response.code === 200) {",
+            "pm.collectionVariables.set('token', pm.response.json().access_token);",
+            "}"
+          ]
+        }
+      }],
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\":\"aryan@gmail.com\",\"password\":\"Aryan12345\"}"
+        },
+        "url": "http://127.0.0.1:5000/api/auth/login"
+      }
+    },
+    {
+      "name": "Protected Profile",
+      "request": {
+        "method": "GET",
+        "header": [{
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }],
+        "url": "http://127.0.0.1:5000/api/auth/profile"
+      }
+    }
+  ],
+  "variable": [
+    {"key": "token", "value": ""}
+  ]
+}
